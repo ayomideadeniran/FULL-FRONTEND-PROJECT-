@@ -14,7 +14,7 @@ const ForgotPassword = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/forgot-password",
+        "https://full-backend-project2.onrender.com/forgot-password",
         { email },
         { withCredentials: true } // Include credentials for session management
       );

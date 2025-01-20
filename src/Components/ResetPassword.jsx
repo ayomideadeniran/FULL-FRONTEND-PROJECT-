@@ -25,7 +25,7 @@ const ResetPassword = () => {
     try {
       // Send the reset password request to the server
       const response = await axios.post(
-        `http://localhost:3000/reset-password/${token}`,
+        `https://full-backend-project2.onrender.com/reset-password/${token}`,
         { password, confirmPassword }
       );
       setMessage(response.data.message || "Password reset successfully.");

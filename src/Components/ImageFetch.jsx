@@ -16,7 +16,7 @@ const ImageGallery = () => {
       return;
     }
     try {
-      const response = await axios.get(`http://localhost:3000/images/${email}`);
+      const response = await axios.get(`https://full-backend-project2.onrender.com/images/${email}`);
       setImages(response.data.images);
       setError('');
       setMessage('');

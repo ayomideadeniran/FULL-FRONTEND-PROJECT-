@@ -41,7 +41,7 @@ const RegistrationForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/submit-form', formData);
+      const response = await axios.post('https://full-backend-project2.onrender.com/submit-form', formData);
       setMessage(response.data.message);
       setError('');
     } catch (err) {

@@ -28,7 +28,7 @@ const ImageUpload = () => {
     formData.append('email', email);
 
     try {
-      const response = await axios.post('http://localhost:3000/submit-upload', formData, {
+      const response = await axios.post('https://full-backend-project2.onrender.com/submit-upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
