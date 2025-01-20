@@ -8,6 +8,8 @@ const ImageGallery = () => {
   const [error, setError] = useState('');
   const [deleteError, setDeleteError] = useState('');
   const [deleteMessage, setDeleteMessage] = useState('');
+  const [loading, setLoading] = useState(false); // Loader for fetching images
+  const [deleting, setDeleting] = useState(false); // Loader for deleting images
 
   // Fetch images based on email
   const fetchImages = async () => {
@@ -15,6 +17,8 @@ const ImageGallery = () => {
       setError('Please enter an email.');
       return;
     }
+
+    setLoading(true); // Show loader
     try {
       const response = await axios.get(`https://full-backend-project2.onrender.com/images/${email}`);
       setImages(response.data.images);
@@ -23,14 +27,17 @@ const ImageGallery = () => {
     } catch (err) {
       setError('No images found for this email.');
       setMessage('');
+    } finally {
+      setLoading(false); // Hide loader
     }
   };
 
   // Handle image deletion
   const deleteImage = async (imageId) => {
+    setDeleting(true); // Show loader for deleting
     try {
       const response = await axios.delete('http://localhost:3000/delete-image', {
-        data: { imageId, email }
+        data: { imageId, email },
       });
       setDeleteMessage(response.data.message);
       setDeleteError('');
@@ -38,6 +45,8 @@ const ImageGallery = () => {
     } catch (err) {
       setDeleteError('Failed to delete image.');
       setDeleteMessage('');
+    } finally {
+      setDeleting(false); // Hide loader
     }
   };
 
@@ -73,8 +82,18 @@ const ImageGallery = () => {
         />
       </div>
 
-      <button onClick={fetchImages} className="btn btn-primary mb-3">
-        Fetch Images
+      <button
+        onClick={fetchImages}
+        className="btn btn-primary mb-3"
+        disabled={loading}
+      >
+        {loading ? (
+          <div className="spinner-border spinner-border-sm" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        ) : (
+          'Fetch Images'
+        )}
       </button>
 
       {/* Success/Error messages */}
@@ -87,7 +106,13 @@ const ImageGallery = () => {
 
       {/* Display Images */}
       <div className="row">
-        {images.length > 0 ? (
+        {loading ? (
+          <div className="col-12 text-center">
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Fetching Images...</span>
+            </div>
+          </div>
+        ) : images.length > 0 ? (
           images.map((image) => (
             <div key={image._id} className="col-md-4 mb-3">
               <div className="card">
@@ -101,8 +126,18 @@ const ImageGallery = () => {
                   <button
                     onClick={() => deleteImage(image._id)}
                     className="btn btn-danger"
+                    disabled={deleting}
                   >
-                    Delete Image
+                    {deleting ? (
+                      <div
+                        className="spinner-border spinner-border-sm"
+                        role="status"
+                      >
+                        <span className="visually-hidden">Deleting...</span>
+                      </div>
+                    ) : (
+                      'Delete Image'
+                    )}
                   </button>
                 </div>
               </div>

@@ -8,10 +8,11 @@ const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // State for loader
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true); // Show loader
     try {
       const response = await axios.post(
         "https://full-backend-project2.onrender.com/forgot-password",
@@ -41,6 +42,8 @@ const ForgotPassword = () => {
         pauseOnHover: true,
         draggable: true,
       });
+    } finally {
+      setLoading(false); // Hide loader
     }
   };
 
@@ -69,8 +72,18 @@ const ForgotPassword = () => {
                     required
                   />
                 </div>
-                <button type="submit" className="btn btn-primary w-100">
-                  Send Reset Link
+                <button 
+                  type="submit" 
+                  className="btn btn-primary w-100"
+                  disabled={loading} // Disable button when loading
+                >
+                  {loading ? (
+                    <div className="spinner-border spinner-border-sm text-light" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  ) : (
+                    "Send Reset Link"
+                  )}
                 </button>
               </form>
               {message && (

@@ -16,6 +16,7 @@ const Register = () => {
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // State for loader
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -27,6 +28,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Show loader
     try {
       const response = await axios.post(
         // "http://localhost:3000/submit-register",
@@ -48,6 +50,8 @@ const Register = () => {
     } catch (err) {
       setError(err.response?.data?.message || "An error occurred. Please try again.");
       setMessage("");
+    } finally {
+      setLoading(false); // Hide loader
     }
   };
 
@@ -173,7 +177,15 @@ const Register = () => {
         </div>
 
         <div className="col-12">
-          <button type="submit" className="btn btn-primary w-100">Register</button>
+          <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+            {loading ? (
+              <div className="spinner-border spinner-border-sm text-light" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            ) : (
+              "Register"
+            )}
+          </button>
         </div>
       </form>
     </div>

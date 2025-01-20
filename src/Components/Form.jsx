@@ -1,60 +1,70 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({
-    name: 'Ayomide Adeniran',
-    dateOfBirth: '',
-    gender: 'male',
-    nationality: 'Nigeria',
-    address: '',
-    phoneNumber: '0123456789',
-    email: 'ayomideadeniran@gmail.com',
-    emergencyContactName: '61676476743424',
-    emergencyContactRelationship: '98168486934',
-    emergencyContactPhone: '48927472072',
-    previousSchool: 'Yale-University',
-    gradeLevel: '200',
-    coursesCompleted: 'yes',
-    gpa: '4.2',
-    program: 'Bachellor of Science',
-    minor: 'wowow',
-    degreeType: 'Bachelor', 
-    paymentMethod: 'Cash',
-    paymentAmount: '30',
-    financialAid: false, 
-    housingPreferences: 'Shared Room',
-    extracurricularActivities: 'Yes',
-    specialNeeds: 'Yes',
+    name: "Ayomide Adeniran",
+    dateOfBirth: "",
+    gender: "male",
+    nationality: "Nigeria",
+    address: "",
+    phoneNumber: "0123456789",
+    email: "ayomideadeniran@gmail.com",
+    emergencyContactName: "61676476743424",
+    emergencyContactRelationship: "98168486934",
+    emergencyContactPhone: "48927472072",
+    previousSchool: "Yale-University",
+    gradeLevel: "200",
+    coursesCompleted: "yes",
+    gpa: "4.2",
+    program: "Bachellor of Science",
+    minor: "wowow",
+    degreeType: "Bachelor",
+    paymentMethod: "Cash",
+    paymentAmount: "30",
+    financialAid: false,
+    housingPreferences: "Shared Room",
+    extracurricularActivities: "Yes",
+    specialNeeds: "Yes"
   });
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // State for loader
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === "checkbox" ? checked : value
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://full-backend-project2.onrender.com/submit-form', formData);
+      const response = await axios.post(
+        "https://full-backend-project2.onrender.com/submit-form",
+        formData
+      );
       setMessage(response.data.message);
-      setError('');
+      setError("");
     } catch (err) {
-      setError('An error occurred while registering the student.');
-      setMessage('');
+      setError("An error occurred while registering the student.");
+      setMessage("");
     }
   };
 
   return (
     <div className="container">
       <h2>Student Registration Form</h2>
-      {message && <div className="alert alert-success">{message}</div>}
-      {error && <div className="alert alert-danger">{error}</div>}
+      {message &&
+        <div className="alert alert-success">
+          {message}
+        </div>}
+      {error &&
+        <div className="alert alert-danger">
+          {error}
+        </div>}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label className="form-label">Name</label>
@@ -314,7 +324,9 @@ const RegistrationForm = () => {
             onChange={handleChange}
           />
         </div>
-        <button type="submit" className="btn btn-primary">Submit</button>
+        <button type="submit" className="btn btn-primary" disabled={loading}>
+          {loading ? "Submitting..." : "Submit"}
+        </button>{" "}
       </form>
     </div>
   );

@@ -10,6 +10,7 @@ const Login = () => {
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // State for loader
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,27 +22,29 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Show loader
     try {
       const response = await axios.post(
-        // "http://localhost:3000/submit-login",  // Uncomment when working locally
-        "https://full-backend-project2.onrender.com/submit-login",  // Production URL
+        "https://full-backend-project2.onrender.com/submit-login",
         formData
       );
 
       if (response.data.success) {
-        setMessage(response.data.message);  // Show success message
-        setError("");  // Clear any previous error message
+        setMessage(response.data.message);
+        setError("");
         setFormData({
           email: "",
           password: "",
         });
       } else {
-        setError(response.data.message);  // Show error message
-        setMessage("");  // Clear success message
+        setError(response.data.message);
+        setMessage("");
       }
     } catch (err) {
       setError(err.response?.data?.message || "An error occurred. Please try again.");
-      setMessage("");  // Clear success message
+      setMessage("");
+    } finally {
+      setLoading(false); // Hide loader
     }
   };
 
@@ -83,8 +86,14 @@ const Login = () => {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary w-100">
-          Login
+        <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+          {loading ? (
+            <div className="spinner-border spinner-border-sm" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          ) : (
+            "Login"
+          )}
         </button>
       </form>
     </div>
