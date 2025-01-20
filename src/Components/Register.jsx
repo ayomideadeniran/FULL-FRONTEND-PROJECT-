@@ -29,7 +29,8 @@ const Register = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3000/submit-register",
+        // "http://localhost:3000/submit-register",
+        "https://full-backend-project2.onrender.com/submit-register",
         formData
       );
       setMessage(response.data.message || "Registration successful!");
